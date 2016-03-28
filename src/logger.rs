@@ -27,9 +27,11 @@ pub fn init_logger(is_debug: bool) {
         format: Box::new(|msg: &str, level: &log::LogLevel, _location: &log::LogLocation| {
             let t = time::now();
             format!(
-                "[{}{}][{}]\t{}",
+                "[{}{}{}][{}]\t{}",
+                // ISO compatible time display. Use `CLICOLOR=0` for automatic parsing
                 t.strftime("%Y-%m-%dT").unwrap().to_string().cyan(),
-                t.strftime("%T%zUTC").unwrap().to_string().yellow(),
+                t.strftime("%T").unwrap().to_string().yellow(),
+                t.strftime("%zUTC").unwrap().to_string().cyan(),
                 level_to_color(level, &level.to_string()).bold(),
                 level_to_color(level, msg)
             )

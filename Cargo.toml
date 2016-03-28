@@ -16,6 +16,6 @@ mio = "0.5"
 colored = "1.1"
 rustc-serialize = "0.3"
 # XXX- waiting toml-config to merge PR#2
-toml-config = { git = "https://github.com/mackwic/toml-config.git" }
+toml-config = { git = "https://github.com/mackwic/toml-config.git", branch = "feature-log" }
 
 clippy = "*"
