@@ -1,0 +1,6 @@
+[package]
+name = "dhcpr"
+version = "0.1.0"
+authors = ["Thomas Wickham <thomas@wickham.epimeros.org>"]
+
+[dependencies]
