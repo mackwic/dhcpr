@@ -1,7 +1,8 @@
-use mio::udp::*;
+use config;
 
+use mio::udp::*;
 use std::io::Result;
 
 pub trait Listener {
-    fn new(sock: UdpSocket) -> Result<Box<Self>>;
+    fn new(config: config::Config, sock: UdpSocket) -> Result<Box<Self>>;
 }

@@ -58,10 +58,10 @@ fn main() {
         .get_matches();
 
     logger::init_logger(*IS_DEBUG || matches.is_present("is-debug"));
-    let _c = config::init_config(matches.value_of("config-file"));
+    let config = config::init_config(matches.value_of("config-file"));
 
     let sock = mio::udp::UdpSocket::v4().unwrap();
-    let mut s = dhcp::listener4::Server::new(sock.try_clone().unwrap()).unwrap();
+    let mut s = dhcp::listener4::Server::new(config, sock.try_clone().unwrap()).unwrap();
     let mut eloop = mio::EventLoop::new().unwrap();
     eloop.register(&sock, mio::Token(0), mio::EventSet::all(), mio::PollOpt::edge());
     info!("running dhcp server");

@@ -13,7 +13,7 @@ log  = "0.3"
 time = "0.1"
 lazy_static = "0.1"
 mio = "0.5"
-colored = "1.1"
+colored = "1.2"
 rustc-serialize = "0.3"
 # XXX- waiting toml-config to merge PR#2
 toml-config = { git = "https://github.com/mackwic/toml-config.git", branch = "feature-log" }

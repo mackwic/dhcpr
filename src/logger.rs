@@ -24,15 +24,17 @@ pub fn init_logger(is_debug: bool) {
     };
 
     let log_config = fern::DispatchConfig {
-        format: Box::new(|msg: &str, level: &log::LogLevel, _location: &log::LogLocation| {
+        format: Box::new(|msg: &str, level: &log::LogLevel, location: &log::LogLocation| {
             let t = time::now();
             format!(
-                "[{}{}{}][{}]\t{}",
-                // ISO compatible time display. Use `CLICOLOR=0` for automatic parsing
+                "[{}{}{}][{:5}][{:25.25}:{:4.4}]\t{}",
+                // ISO compatible time display. Use `CLICOLOR=0` to remove the colors
                 t.strftime("%Y-%m-%dT").unwrap().to_string().cyan(),
                 t.strftime("%T").unwrap().to_string().yellow(),
                 t.strftime("%zUTC").unwrap().to_string().cyan(),
                 level_to_color(level, &level.to_string()).bold(),
+                location.module_path().to_string().cyan(),
+                location.line().to_string().yellow(),
                 level_to_color(level, msg)
             )
         }),
