@@ -90,6 +90,21 @@ pub fn init_config(file: Option<&str>) -> Config {
 mod tests {
 
     pub use super::*;
+    use std::ffi::OsStr;
+
+    pub fn with_env_var<K: AsRef<OsStr>, V: AsRef<OsStr>, F: FnOnce()>(key: K, val: V, fun: F) {
+        use std::env;
+        let old_var = env::var(&key);
+        env::set_var(&key, &val);
+
+        fun();
+
+        // restore env variable
+        match old_var {
+            Ok(val) => env::set_var("DHCPR_LISTEN4_PORT", &val),
+            Err(_) => env::remove_var("DHCPR_LISTEN4_PORT")
+        }
+    }
 
     describe! config {
         it "should have a default impl" {
@@ -97,49 +112,31 @@ mod tests {
             assert_eq!(c.listen4_port, ::config::DEFAULT_LISTEN4_PORT)
         }
 
-        it "can be overriden by env" {
-            use std::env;
+        it "can be overriden by env 2" {
+            use super::with_env_var;
             let mut c = Config::default();
             let test_value1 = 6464;
             let test_value2 = 6465;
 
-            let old_var = env::var("DHCPR_LISTEN4_PORT");
+            with_env_var("DHCPR_LISTEN4_PORT", test_value1.to_string(), || {
+                c.env_override();
+                assert_eq!(test_value1, c.listen4_port);
+            });
 
-            env::set_var("DHCPR_LISTEN4_PORT", test_value1.to_string());
-            c.env_override();
-            assert_eq!(test_value1, c.listen4_port);
+            with_env_var("DHCPR_LISTEN4_PORT", test_value2.to_string(), || {
+                c.env_override();
+                assert_eq!(test_value2, c.listen4_port);
+            });
 
-            env::set_var("DHCPR_LISTEN4_PORT", test_value2.to_string());
-            c.env_override();
-            assert_eq!(test_value2, c.listen4_port);
-
-            // restore env variable
-            match old_var {
-                Ok(val) => env::set_var("DHCPR_LISTEN4_PORT", val),
-                Err(_) => env::remove_var("DHCPR_LISTEN4_PORT")
-            }
-        }
-
-        it "can be init from a toml file" {
-            extern crate tempfile;
-            use std::io::Write;
-
-            let reason = "unable to create a temporary file for the test";
-            let test_value = 7272;
-
-            let mut file = tempfile::NamedTempFile::new().expect(reason);
-            <tempfile::NamedTempFile as Write>::write_all(&mut file, format!(
-                "listen4_port = {}", test_value
-            ).as_bytes());
-            let c = init_config(Some(file.path().to_str().unwrap()));
-
-            assert_eq!(test_value, c.listen4_port)
+            with_env_var("DHCPR_LISTEN4_PORT", test_value1.to_string(), || {
+                c.env_override();
+                assert_eq!(test_value1, c.listen4_port);
+            });
         }
 
         it "env override the file init" {
             extern crate tempfile;
             use std::io::Write;
-            use std::env;
 
             let reason = "unable to create a temporary file for the test";
             let file_value = 7272;
@@ -149,19 +146,13 @@ mod tests {
             <tempfile::NamedTempFile as Write>::write_all(&mut file, format!(
                 "listen4_port = {}", file_value
             ).as_bytes());
+
             let mut c = init_config(Some(file.path().to_str().unwrap()));
 
-            let old_var = env::var("DHCPR_LISTEN4_PORT");
-            env::set_var("DHCPR_LISTEN4_PORT", env_value.to_string());
-            c.env_override();
-
-            assert_eq!(env_value, c.listen4_port);
-
-            // restore env variable
-            match old_var {
-                Ok(val) => env::set_var("DHCPR_LISTEN4_PORT", val),
-                Err(_) => env::remove_var("DHCPR_LISTEN4_PORT")
-            }
+            with_env_var("DHCPR_LISTEN4_PORT", env_value.to_string(), || {
+                c.env_override();
+                assert_eq!(env_value, c.listen4_port);
+            });
         }
 
     }
