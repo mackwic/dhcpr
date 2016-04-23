@@ -7,7 +7,7 @@ use std::net::*;
 use std::str::FromStr;
 
 use super::listener::Listener;
-use super::messages;
+//use super::messages;
 use config;
 
 const _SERVER_4: mio::Token = mio::Token(0);
@@ -28,7 +28,8 @@ impl Listener for Server {
 
 impl mio::Handler for Server {
     type Timeout = (); // FIXME
-    type Message = messages::S2CMessages;
+    type Message = (); // FIXME
+    //type Message = messages::S2CMessages;
 
     fn ready(&mut self, _eloop: &mut mio::EventLoop<Server>, _token: mio::Token, events: mio::EventSet) {
         info!("event loop {:?}", events)

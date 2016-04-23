@@ -14,6 +14,7 @@ pub struct Config {
     toto: String,
 }
 
+/*
 type ipaddr_bin = [u8; 4];
 
 #[derive(Debug,PartialEq,Eq)]
@@ -25,12 +26,13 @@ pub struct NetworkOptions {
     lease_time: u32,
     gateway: Option<ipaddr_bin>,
     timeserver: Option<ipaddr_bin>,
-    // FIXME multiple DNS
+    // FIXME multiple    DNS
     dns: Option<ipaddr_bin>,
     //hostname: Option<String>,
     domain: Option<String>,
     max_lease_time: u32,
 }
+*/
 
 macro_rules! env_override_item {
     ($env_str:expr => $conf_item:expr , u16) => {{
@@ -59,6 +61,7 @@ impl Default for Config {
     }
 }
 
+/*
 impl Default for NetworkOptions {
     fn default() -> Self {
         NetworkOptions {
@@ -73,6 +76,7 @@ impl Default for NetworkOptions {
         }
     }
 }
+*/
 
 pub fn init_config(file: Option<&str>) -> Config {
     let mut config = if let Some(path) = file {
@@ -112,7 +116,7 @@ mod tests {
             assert_eq!(c.listen4_port, ::config::DEFAULT_LISTEN4_PORT)
         }
 
-        it "can be overriden by env 2" {
+        it "can be overriden by env" {
             use super::with_env_var;
             let mut c = Config::default();
             let test_value1 = 6464;
