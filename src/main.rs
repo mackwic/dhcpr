@@ -1,5 +1,5 @@
-#![feature(plugin)]
-#![plugin(clippy)]
+//#![feature(plugin)]
+//#![plugin(clippy)]
 
 extern crate clap;
 extern crate colored;
@@ -32,8 +32,13 @@ lazy_static! {
  TODO:
  -
 
- IDEA:
+ IDEAS:
  - BOOTP relay mode
+ - pid file: option to enable by providing the location to write the pid file
+ - OPTIONAL persistant storage with adapters:
+    - Sqlite4 K/V
+    - Redis
+    - Etcd / Consul
 */
 
 

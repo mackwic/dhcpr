@@ -19,6 +19,7 @@ pub struct Server {
 
 impl Listener for Server {
     fn new(config: config::Config, sock: udp::UdpSocket) -> Result<Box<Self>> {
+        // Not configurable. The RFC say that the server SHOULD listen on all interfaces
         let local_ip4 = IpAddr::from_str("0.0.0.0").unwrap();
         try!(sock.bind(&SocketAddr::new(local_ip4, config.listen4_port)));
         Ok(Box::new(Server { sock: Box::new(sock) }))
