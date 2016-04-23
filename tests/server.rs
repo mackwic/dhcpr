@@ -1,33 +1,51 @@
-#![feature(plugin)]
-#![plugin(speculate)]
+#[macro_use]
+mod common;
 
 fn main() {
-    println!("running tests");
+    println!("hello there !");
 }
 
-pub mod math {
-    pub fn add(a: i32, b: i32) -> i32 {
-        a + b
-    }
+fn setup() {
+    println!("setup called");
 
-    pub fn sub(a: i32, b: i32) -> i32 {
-        a - b
-    }
+    use std::env;
+
+    // We assume that we are in a valid directory.
+    let p = env::current_dir().unwrap();
+    println!("The current directory is {}", p.display());
 }
+
+fn teardown(_void: ()) {
+
+}
+
+test!(plop {
+    assert_eq!(1,1)
+});
+
+test!(plip {
+    assert_eq!(2,2)
+});
+
+it!(should_be_ran {
+    assert_eq!("a", &String::from("a"))
+});
+
+/*
+use std::process;
+use std::env;
 
 speculate! {
-    describe "math" {
+    describe "network communication" {
+
         before {
-            let zero = 0;
-            let one = 1;
+            println!("cwd={:?}", env::current_dir());
+            1+1
         }
 
         it "can add stuff" {
-            assert_eq!(one, ::math::add(zero, one));
-        }
-
-        it "can subtract stuff" {
-            assert_eq!(zero, ::math::sub(one, one));
+            assert_eq!(1, 1+0)
         }
     }
 }
+*/

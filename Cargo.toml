@@ -20,4 +20,5 @@ toml-config = "0.3"
 #clippy = "*"
 
 [dev-dependencies]
-speculate = "0.0"
+stainless = "*"
+tempfile = "2.1"
