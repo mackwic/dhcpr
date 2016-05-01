@@ -1,7 +1,5 @@
 //#![feature(plugin)]
 //#![plugin(clippy)]
-#![feature(plugin)]
-#![cfg_attr(test, plugin(stainless))]
 
 extern crate clap;
 extern crate colored;
@@ -17,6 +15,8 @@ extern crate toml_config;
 
 #[cfg(test)]
 extern crate tempfile;
+#[cfg(test)]
+extern crate mio_test;
 
 mod config;
 mod dhcp;

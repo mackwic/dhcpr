@@ -22,3 +22,4 @@ toml-config = "0.3"
 [dev-dependencies]
 stainless = "*"
 tempfile = "2.1"
+mio-test = { path = "lib/mio-test" }
